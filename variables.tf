@@ -10,6 +10,20 @@ variable "vpc_name" {
 
 }
 
+variable "enable_dns_hostnames" {
+  description = "Habilitar nombres de host DNS"
+  type        = bool
+  default     = true
+
+}
+
+variable "enable_dns_support" {
+  description = "Habilitar soporte DNS"
+  type        = bool
+  default     = true
+
+}
+
 variable "cidr_block_vpc" {
   type = string
 }

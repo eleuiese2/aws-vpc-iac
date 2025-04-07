@@ -5,8 +5,8 @@ provider "aws" {
 resource "aws_vpc" "main" {
   count                = var.create ? 1 : 0
   cidr_block           = var.cidr_block_vpc
-  enable_dns_support   = true
-  enable_dns_hostnames = true
+  enable_dns_support   = var.enable_dns_hostnames
+  enable_dns_hostnames = var.enable_dns_support
   tags = {
     Name = var.vpc_name
   }
