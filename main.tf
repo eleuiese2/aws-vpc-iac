@@ -1,7 +1,3 @@
-provider "aws" {
-  region = var.region  # Usar la variable `region` para definir la región de AWS
-}
-
 resource "aws_vpc" "main" {
   count      = var.create ? 1 : 0
   cidr_block = var.cidr_block_vpc
