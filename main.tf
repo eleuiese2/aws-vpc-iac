@@ -43,7 +43,7 @@ resource "aws_internet_gateway" "internet_gateway" {
 # Crear NAT Gateway para subredes privadas
 resource "aws_eip" "nat_gateway_eip" {
   count = var.create ? 1 : 0
-  vpc   = true
+  domain = "vpc"
 }
 
 resource "aws_nat_gateway" "nat_gateway" {
