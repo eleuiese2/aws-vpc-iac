@@ -1,12 +1,12 @@
 output "public_subnet_ids" {
-  value = aws_subnet.public[*].id
+  value = var.create ? aws_subnet.public[*].id : null
 }
 
 output "private_subnet_ids" {
-  value = aws_subnet.private[*].id
+  value = var.create ? aws_subnet.private[*].id : null
 }
 
 output "vpc_id" {
-  value = aws_vpc.main[0].id
+  value = var.create ? aws_vpc.main[0].id : null
 }
 
