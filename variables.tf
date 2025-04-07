@@ -17,7 +17,7 @@ variable "cidr_block_vpc" {
 variable "region" {
   description = "La región de AWS donde se desplegarán los recursos"
   type        = string
-  default     = "us-east-1" # Puedes definir un valor predeterminado o dejarlo vacío para ser obligatorio
+  default     = "us-east-1"
 }
 
 variable "cidr_public_subnets" {
