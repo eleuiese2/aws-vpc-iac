@@ -4,32 +4,30 @@ resource "aws_vpc" "main" {
   enable_dns_support   = true
   enable_dns_hostnames = true
   tags = {
-    Name = "${var.vpc_name}-vpc"
+    Name = var.vpc_name
   }
 }
 
 # Crear subredes públicas
 resource "aws_subnet" "public" {
-  count                   = var.create ? 1 : 0
-  for_each                = toset(var.cidr_public_subnets)
+  count                   = var.create ? length(var.cidr_public_subnets) : 0
   vpc_id                  = aws_vpc.main[0].id
-  cidr_block              = each.value
-  availability_zone       = element(var.availability_zones, index(var.cidr_public_subnets, each.key)) # Usamos las zonas de disponibilidad de la variable
+  cidr_block              = var.cidr_public_subnets[count.index]
+  availability_zone       = var.availability_zones[count.index] # Usar el índice para asignar la AZ correspondiente
   map_public_ip_on_launch = true
   tags = {
-    Name = "public-subnet-${each.key}"
+    Name = "public-subnet-${count.index}"
   }
 }
 
 # Crear subredes privadas
 resource "aws_subnet" "private" {
-  count             = var.create ? 1 : 0
-  for_each          = toset(var.cidr_private_subnets)
+  count             = var.create ? length(var.cidr_private_subnets) : 0
   vpc_id            = aws_vpc.main[0].id
-  cidr_block        = each.value
-  availability_zone = element(var.availability_zones, index(var.cidr_private_subnets, each.key)) # Usamos las zonas de disponibilidad de la variable
+  cidr_block        = var.cidr_private_subnets[count.index]
+  availability_zone = var.availability_zones[count.index] # Usar el índice para asignar la AZ correspondiente
   tags = {
-    Name = "private-subnet-${each.key}"
+    Name = "private-subnet-${count.index}"
   }
 }
 
@@ -71,7 +69,7 @@ resource "aws_route" "internet_route" {
 
 # Asociar subredes públicas con la tabla de enrutamiento pública
 resource "aws_route_table_association" "public_association" {
-  count          = var.create ? 3 : 0
+  count          = var.create ? length(var.cidr_public_subnets) : 0
   subnet_id      = aws_subnet.public[count.index].id
   route_table_id = aws_route_table.public[0].id
 }
@@ -92,7 +90,7 @@ resource "aws_route" "private_nat_route" {
 
 # Asociar subredes privadas con la tabla de enrutamiento privada
 resource "aws_route_table_association" "private_association" {
-  count          = var.create ? 3 : 0
+  count          = var.create ? length(var.cidr_private_subnets) : 0
   subnet_id      = aws_subnet.private[count.index].id
   route_table_id = aws_route_table.private[0].id
 }
