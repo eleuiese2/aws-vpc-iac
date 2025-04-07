@@ -10,7 +10,8 @@ resource "aws_vpc" "main" {
 
 # Crear subredes públicas
 resource "aws_subnet" "public" {
-  for_each                = var.create ? toset(var.cidr_public_subnets) : {}
+  count                   = var.create ? 1 : 0
+  for_each                = toset(var.cidr_public_subnets)
   vpc_id                  = aws_vpc.main[0].id
   cidr_block              = each.value
   availability_zone       = element(var.availability_zones, index(var.cidr_public_subnets, each.key)) # Usamos las zonas de disponibilidad de la variable
@@ -22,7 +23,8 @@ resource "aws_subnet" "public" {
 
 # Crear subredes privadas
 resource "aws_subnet" "private" {
-  for_each          = var.create ? toset(var.cidr_private_subnets) : {}
+  count             = var.create ? 1 : 0
+  for_each          = toset(var.cidr_private_subnets)
   vpc_id            = aws_vpc.main[0].id
   cidr_block        = each.value
   availability_zone = element(var.availability_zones, index(var.cidr_private_subnets, each.key)) # Usamos las zonas de disponibilidad de la variable
