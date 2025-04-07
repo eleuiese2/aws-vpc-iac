@@ -94,7 +94,7 @@ resource "aws_route" "private_nat_route" {
 
 # Asociar subredes privadas con la tabla de enrutamiento privada
 resource "aws_route_table_association" "private_association" {
-  count          = var.create ? 3 : 0
+  count          = var.create ? length(var.cidr_private_subnets) : 0
   subnet_id      = aws_subnet.private[count.index].id
   route_table_id = aws_route_table.private[0].id
 }
