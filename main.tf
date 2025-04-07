@@ -64,7 +64,7 @@ resource "aws_route_table" "public" {
 }
 
 resource "aws_route" "internet_route" {
-  count                  = var.create ? 3 : 0
+  count                  = var.create ? 1 : 0
   route_table_id         = aws_route_table.public[0].id
   destination_cidr_block = "0.0.0.0/0"
   gateway_id             = aws_internet_gateway.internet_gateway[0].id
@@ -85,7 +85,7 @@ resource "aws_route_table" "private" {
 }
 
 resource "aws_route" "private_nat_route" {
-  count                  = var.create ? 3 : 0
+  count                  = var.create ? 1 : 0
   route_table_id         = aws_route_table.private[0].id
   destination_cidr_block = "0.0.0.0/0"
   nat_gateway_id         = aws_nat_gateway.nat_gateway[0].id
